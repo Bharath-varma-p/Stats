@@ -1,6 +1,8 @@
 import streamlit as st
-import pandas as pd
+#import pandas as pd
 import numpy as np
+from time import sleep
+import time
 
 hide_menu_style = """
         <style>
@@ -9,35 +11,26 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)   #removed hamburger menu
 
-st.title('Uber pickups in NYC')
+padding = 0
+st.markdown(f""" <style>
+    .reportview-container .main .block-container{{
+        padding-top: {padding}rem;
+        padding-right: {padding}rem;
+        padding-left: {padding}rem;
+        padding-bottom: {padding}rem;
+    }} </style> """, unsafe_allow_html=True) # removes padding
 
-DATE_COLUMN = 'date/time'
-DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
-            'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
 
-@st.cache
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
+st.markdown("## Party time!")
+st.write("Yay! you have took 1st step to learn. Click below to celebrate.")
+btn = st.button("Celebrate!")
+if btn:
+    st.balloons()
 
-data_load_state = st.text('Loading data...')
-data = load_data(10000)
-data_load_state.text("Done! (using st.cache)")
+st.title("Welcome to abslute Basics")
 
-if st.checkbox('Show raw data'):
-    st.subheader('Raw data')
-    st.write(data)
-
-st.subheader('Number of pickups by hour')
-hist_values = np.histogram(data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-st.bar_chart(hist_values)
-
-# Some number in the range 0-23
-hour_to_filter = st.slider('hour', 0, 23, 17)
-filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
-
-st.subheader('Map of all pickups at %s:00' % hour_to_filter)
-st.map(filtered_data)
+dataframe = np.random.randn(10,1 )
+st.write('## mean = ',np.mean(dataframe))
+st.write('## median = ',np.median(dataframe))
+#st.write('mode = ',np.m(dataframe))
+st.dataframe(dataframe)
